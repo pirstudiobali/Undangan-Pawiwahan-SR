@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f7f3ea">
+  <meta name="description" content="Undangan pernikahan Sarmita dan Reni dalam bentuk buku digital interaktif.">
+  <title>Undangan Sarmita &amp; Reni</title>
+  <link rel="stylesheet" href="./css/style.css?v=20261102-final-v2">
+  <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+</head>
+<body>
+  <div class="ambient-ornament ambient-ornament-top" aria-hidden="true">
+    <svg viewBox="0 0 260 220" role="presentation">
+      <path d="M4 202C62 170 70 105 128 69c37-23 81-27 124-64M31 218c38-52 65-85 96-107M76 193c-2-31 13-53 39-68M116 159c-5-25 5-44 24-58M153 126c0-19 9-34 25-44"/>
+      <path d="M75 147c-24-4-37-18-41-41 24 1 39 14 41 41ZM111 112c-24-3-38-17-42-40 25 1 39 14 42 40ZM153 80c-21-7-32-23-29-45 23 5 34 20 29 45ZM185 59c-9-20-5-38 12-53 12 20 8 38-12 53Z"/>
+      <path d="M44 176c-18-1-31-11-39-29 20-3 34 7 39 29ZM88 134c-18-2-29-13-34-31 20 0 32 10 34 31Z"/>
+    </svg>
+  </div>
+  <div class="ambient-ornament ambient-ornament-bottom" aria-hidden="true">
+    <svg viewBox="0 0 260 220" role="presentation">
+      <path d="M256 18c-58 32-66 97-124 133-37 23-81 27-124 64M229 2c-38 52-65 85-96 107M184 27c2 31-13 53-39 68M144 61c5 25-5 44-24 58M107 94c0 19-9 34-25 44"/>
+      <path d="M185 73c24 4 37 18 41 41-24-1-39-14-41-41ZM149 108c24 3 38 17 42 40-25-1-39-14-42-40ZM107 140c21 7 32 23 29 45-23-5-34-20-29-45ZM75 161c9 20 5 38-12 53-12-20-8-38 12-53Z"/>
+      <path d="M216 44c18 1 31 11 39 29-20 3-34-7-39-29ZM172 86c18 2 29 13 34 31-20 0-32-10-34-31Z"/>
+    </svg>
+  </div>
+
+  <main id="reader-stage" class="reader-stage">
+    <section class="book-shell" aria-label="Buku undangan interaktif">
+      <div id="loading" class="loading-panel" role="status">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Menyiapkan undangan…</span>
+      </div>
+      <div id="error" class="error-panel" role="alert" hidden>
+        <strong>Buku belum dapat ditampilkan.</strong>
+        <p id="error-message">Periksa file PDF dan koneksi pustaka pendukung.</p>
+      </div>
+      <div id="book" class="book" hidden></div>
+    </section>
+
+    <nav class="reader-controls" aria-label="Navigasi halaman buku">
+      <button id="prev-button" class="icon-control" type="button" disabled aria-label="Halaman sebelumnya" title="Halaman sebelumnya">
+        <span aria-hidden="true">‹</span>
+      </button>
+      <div class="page-indicator" aria-live="polite">
+        <input id="page-number" type="number" min="1" value="1" inputmode="numeric" aria-label="Nomor halaman">
+        <span class="page-separator">/</span>
+        <span id="page-total">—</span>
+      </div>
+      <button id="next-button" class="icon-control icon-control-primary" type="button" disabled aria-label="Halaman berikutnya" title="Halaman berikutnya">
+        <span aria-hidden="true">›</span>
+      </button>
+      <button id="fullscreen-button" class="icon-control fullscreen-control" type="button" aria-label="Layar penuh" title="Layar penuh">
+        <span aria-hidden="true">⛶</span>
+      </button>
+    </nav>
+  </main>
+
+  <footer class="site-footer">made by pakde</footer>
+
+  <script type="module" src="./js/app.js?v=20261102-final-v2"></script>
+</body>
+</html>

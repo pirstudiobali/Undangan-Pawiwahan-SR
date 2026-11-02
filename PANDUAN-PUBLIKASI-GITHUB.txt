@@ -1,0 +1,43 @@
+PANDUAN PUBLIKASI FLIPBOOK UNDANGAN SARMIta & RENI
+
+A. SIAPKAN FILE
+1. Ekstrak ZIP.
+2. Buka folder "undangan-sarmita-reni".
+3. Pastikan terlihat index.html, .nojekyll, README.md, LICENSES.md, serta folder css, js, documents.
+4. Jangan unggah file Excel daftar tamu. File Excel disimpan lokal di komputer.
+
+B. BUAT REPOSITORY
+1. Masuk ke https://github.com dan login.
+2. Klik tombol + di kanan atas, lalu pilih New repository.
+3. Repository name: undangan-sarmita-reni
+4. Pilih Public.
+5. Jangan centang Add a README file (README sudah ada dalam paket).
+6. Klik Create repository.
+
+C. UNGGAH WEBSITE
+1. Pada halaman repository, pilih Add file > Upload files.
+2. Buka folder "undangan-sarmita-reni" di komputer.
+3. Pilih SELURUH ISI folder tersebut (bukan folder induknya): index.html, .nojekyll, README.md, LICENSES.md, dan folder css, js, documents.
+4. Seret ke area upload GitHub.
+5. Tunggu upload selesai, lalu klik Commit changes.
+6. Pastikan index.html terlihat di root repository, bukan di dalam subfolder tambahan.
+
+D. AKTIFKAN GITHUB PAGES
+1. Buka tab Settings pada repository.
+2. Pada menu sebelah kiri, pilih Pages.
+3. Di Build and deployment, pilih Source: Deploy from a branch.
+4. Branch: main. Folder: /(root).
+5. Klik Save.
+6. Tunggu hingga status deployment selesai. Buka Settings > Pages dan gunakan tautan Visit site yang ditampilkan.
+
+E. CONTOH TAUTAN PERSONAL
+https://NAMA-AKUN.github.io/undangan-sarmita-reni/?to=Bapak%20Andi
+https://NAMA-AKUN.github.io/undangan-sarmita-reni/?to=Ibu%20Siti
+
+Ganti NAMA-AKUN dengan username GitHub Anda.
+
+PENTING
+- Seluruh isi repository publik, termasuk PDF undangan, dapat diakses publik.
+- Jangan unggah Excel daftar tamu atau data pribadi lainnya.
+- Nama pada URL adalah personalisasi tampilan saja, bukan tautan rahasia atau autentikasi.
+- PDF.js dan StPageFlip menggunakan CDN, jadi pengunjung memerlukan internet.
