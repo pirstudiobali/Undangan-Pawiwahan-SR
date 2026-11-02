@@ -19,7 +19,11 @@ let pageCount = 0;
 let bookReady = false;
 let recipientObservers = [];
 
-console.info("[Flipbook final] Memuat PDF:", PDF_URL);
+const musicAudio = document.getElementById("background-music");
+const musicButton = document.getElementById("music-button");
+let musicAutoStartAttempted = false;
+
+console.info("[Flipbook final + musik V4] Memuat PDF:", PDF_URL);
 
 function setVisible(element, visible, displayValue = "") {
   if (!element) return;
@@ -116,6 +120,165 @@ function observeRecipientNames(root) {
       recipientObservers.push(observer);
     }
   });
+}
+
+function updateMusicControl() {
+  if (!musicAudio || !musicButton) return;
+  // Pastikan kontrol musik tetap terlihat meskipun style lama pernah menyembunyikannya.
+  musicButton.hidden = false;
+  musicButton.removeAttribute("hidden");
+  musicButton.style.setProperty("display", "inline-flex", "important");
+  musicButton.style.visibility = "visible";
+  const isPlaying = !musicAudio.paused && !musicAudio.ended;
+  musicButton.classList.toggle("is-playing", isPlaying);
+  musicButton.setAttribute("aria-pressed", String(isPlaying));
+  musicButton.setAttribute("aria-label", isPlaying ? "Jeda musik" : "Putar musik");
+  musicButton.title = isPlaying ? "Jeda musik" : "Putar musik";
+  const icon = musicButton.querySelector("span");
+  if (icon) icon.textContent = isPlaying ? "Ⅱ" : "♫";
+}
+
+let musicPlayPromise = null;
+let musicHasStarted = false;
+
+function logAudioFailure(reason, error = musicAudio?.error) {
+  const details = {
+    reason,
+    src: musicAudio?.currentSrc || musicAudio?.src || "(sumber kosong)",
+    errorCode: error?.code ?? null,
+    networkState: musicAudio?.networkState ?? null,
+    readyState: musicAudio?.readyState ?? null,
+    mediaError: error?.message || null,
+  };
+  console.error("[Musik V4] Audio tidak dapat diputar:", details);
+  if (musicButton) {
+    musicButton.title = "Musik belum dapat diputar. Periksa file assets/background-music.mp3.";
+    musicButton.setAttribute("aria-label", "Coba putar musik kembali");
+  }
+}
+
+function requestMusicPlayback(source = "interaksi pengguna") {
+  if (!musicAudio || !musicButton) {
+    console.error("[Musik V4] Elemen #background-music atau #music-button tidak ditemukan.");
+    return Promise.resolve(false);
+  }
+  if (!musicAudio.paused && !musicAudio.ended) {
+    updateMusicControl();
+    return Promise.resolve(true);
+  }
+  if (musicPlayPromise) return musicPlayPromise;
+
+  musicAudio.loop = true;
+  musicAudio.volume = 0.42;
+  musicAudio.muted = false;
+  musicAudio.preload = "auto";
+
+  // PENTING: play() dipanggil sinkron di dalam handler klik/sentuhan,
+  // sebelum ada await, agar browser mengenali interaksi pengguna.
+  try {
+    const result = musicAudio.play();
+    if (!result || typeof result.then !== "function") {
+      musicHasStarted = true;
+      updateMusicControl();
+      console.info(`[Musik V4] Pemutaran dimulai dari ${source}.`);
+      return Promise.resolve(true);
+    }
+    musicPlayPromise = result.then(() => {
+      musicHasStarted = true;
+      updateMusicControl();
+      console.info(`[Musik V4] Berhasil diputar dari ${source}.`, musicAudio.currentSrc);
+      return true;
+    }).catch((error) => {
+      updateMusicControl();
+      logAudioFailure(source, error);
+      return false;
+    }).finally(() => {
+      musicPlayPromise = null;
+    });
+    return musicPlayPromise;
+  } catch (error) {
+    logAudioFailure(source, error);
+    return Promise.resolve(false);
+  }
+}
+
+function handleReaderGesture(event) {
+  if (!readerStage || !musicAudio || !musicButton) return;
+  const target = event.target;
+  if (!(target instanceof Element)) return;
+  if (!readerStage.contains(target)) return;
+  // Tombol musik punya handler toggle sendiri.
+  if (target.closest("#music-button")) return;
+  if (musicAudio.paused && !musicHasStarted) {
+    void requestMusicPlayback(`gesture ${event.type}`);
+  }
+}
+
+function toggleBackgroundMusic(event) {
+  event?.preventDefault();
+  event?.stopPropagation();
+  if (!musicAudio) return;
+  if (musicAudio.paused || musicAudio.ended) {
+    void requestMusicPlayback("tombol musik toolbar");
+  } else {
+    musicAudio.pause();
+    updateMusicControl();
+    console.info("[Musik V4] Dijeda oleh pengguna.");
+  }
+}
+
+if (musicAudio && musicButton) {
+  musicAudio.loop = true;
+  musicAudio.preload = "auto";
+  musicAudio.volume = 0.42;
+  musicButton.hidden = false;
+  musicButton.removeAttribute("hidden");
+  musicButton.style.setProperty("display", "inline-flex", "important");
+  musicButton.style.visibility = "visible";
+
+  musicAudio.addEventListener("play", () => {
+    updateMusicControl();
+    console.info("[Musik V4] Event play diterima.");
+  });
+  musicAudio.addEventListener("playing", () => {
+    updateMusicControl();
+    console.info("[Musik V4] Audio benar-benar sedang diputar.");
+  });
+  musicAudio.addEventListener("pause", updateMusicControl);
+  musicAudio.addEventListener("ended", updateMusicControl);
+  musicAudio.addEventListener("loadedmetadata", () => {
+    console.info("[Musik V4] Metadata audio berhasil dibaca:", {
+      src: musicAudio.currentSrc,
+      duration: musicAudio.duration,
+    });
+  });
+  musicAudio.addEventListener("canplay", () => {
+    console.info("[Musik V4] File musik siap diputar.");
+  }, { once: true });
+  musicAudio.addEventListener("error", () => logAudioFailure("event error audio"));
+  musicButton.addEventListener("click", toggleBackgroundMusic);
+
+  // Mulai saat tamu pertama kali menyentuh/mengklik buku atau kontrol navigasi.
+  // Capture pada readerStage menangkap gesture sebelum StPageFlip memprosesnya.
+  readerStage.addEventListener("pointerdown", handleReaderGesture, true);
+  readerStage.addEventListener("touchstart", handleReaderGesture, { capture: true, passive: true });
+  readerStage.addEventListener("click", handleReaderGesture, true);
+  readerStage.addEventListener("keydown", (event) => {
+    if (["Enter", " ", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+      handleReaderGesture(event);
+    }
+  }, true);
+
+  // Mulai mengunduh metadata/file lebih awal; playback tetap menunggu interaksi.
+  try { musicAudio.load(); } catch (error) { console.warn("[Musik V4] Audio preload gagal:", error); }
+  updateMusicControl();
+  console.info("[Musik V4] Kontrol siap:", {
+    tombolDitemukan: Boolean(musicButton),
+    audioDitemukan: Boolean(musicAudio),
+    sumber: musicAudio.currentSrc || musicAudio.src,
+  });
+} else {
+  console.error("[Musik V4] Elemen #background-music atau #music-button tidak ditemukan di index.html.");
 }
 
 function markBookReady() {
@@ -225,7 +388,7 @@ async function renderPdfToBook() {
     if (document.fonts?.ready) await document.fonts.ready;
     fitAllRecipientNames();
 
-    console.info("[Flipbook final] Buku berhasil disiapkan:", {
+    console.info("[Flipbook final + musik] Buku berhasil disiapkan:", {
       halaman: pageCount,
       ukuranHalaman: `${pageWidth} x ${pageHeight}`,
       namaPenerima: getGuestName(),
@@ -244,6 +407,12 @@ function flipPrevious(event) {
   event?.preventDefault();
   event?.stopPropagation();
   if (!bookReady || !pageFlip) return;
+
+  // Mulai musik pada aksi navigasi pertama jika belum pernah diputar.
+  // Jangan memulai ulang jika tamu sengaja menjeda musik.
+  if (musicAudio?.paused && !musicHasStarted) {
+    void requestMusicPlayback("tombol halaman sebelumnya");
+  }
   pageFlip.flipPrev();
 }
 
@@ -251,6 +420,12 @@ function flipNext(event) {
   event?.preventDefault();
   event?.stopPropagation();
   if (!bookReady || !pageFlip) return;
+
+  // Mulai musik pada aksi navigasi pertama jika belum pernah diputar.
+  // Jangan memulai ulang jika tamu sengaja menjeda musik.
+  if (musicAudio?.paused && !musicHasStarted) {
+    void requestMusicPlayback("tombol halaman berikutnya");
+  }
   pageFlip.flipNext();
 }
 

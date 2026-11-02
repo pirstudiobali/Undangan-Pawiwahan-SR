@@ -1,31 +1,44 @@
-# Undangan Digital Sarmita & Reni
+# Undangan Pawiwahan Sarmita & Reni
 
-Flipbook undangan digital berbasis HTML, PDF.js, dan StPageFlip.
+Flipbook undangan digital berbasis HTML, PDF.js, dan StPageFlip. Paket ini berisi versi V4 yang telah diuji secara lokal, termasuk musik latar.
 
 ## Fitur
-- Tampilan buku digital dengan navigasi halaman dan layar penuh.
+- Flipbook PDF 4 halaman dengan navigasi Sebelumnya/Berikutnya.
+- Tombol layar penuh.
 - Nama penerima personal melalui parameter URL `?to=`.
-- Nama panjang menyesuaikan ukuran agar tetap berada dalam area sampul.
+- Ukuran nama menyesuaikan panjang teks pada area sampul.
+- Musik latar MP3, Play/Pause, dan loop; pemutaran dimulai setelah interaksi pengguna.
 - Tampilan responsif untuk desktop dan ponsel.
-- PDF utama disimpan pada `documents/undangan-master.pdf`.
 
-## Publikasi GitHub Pages
-1. Buat repository GitHub bernama `undangan-sarmita-reni` dan pilih **Public**.
-2. Unggah isi folder ini ke **root** repository (file `index.html` harus terlihat langsung di halaman utama repository).
-3. Buka **Settings → Pages**.
-4. Pada **Build and deployment**, pilih **Deploy from a branch**.
-5. Pilih branch `main`, folder `/(root)`, lalu klik **Save**.
-6. Setelah deployment selesai, alamat website akan berbentuk `https://NAMA-AKUN.github.io/undangan-sarmita-reni/`.
+## Struktur utama
+- `index.html` — halaman utama.
+- `css/style.css` — tampilan dan layout.
+- `js/app.js` — Flipbook, personalisasi nama, navigasi, dan audio.
+- `documents/undangan-master.pdf` — PDF undangan utama.
+- `assets/background-music.mp3` — musik latar.
+
+## Repository dan alamat website
+Paket ini ditujukan untuk repository yang sudah digunakan:
+
+- Akun GitHub: `pirstudiobali`
+- Repository: `Undangan-Pawiwahan-SR`
+- Alamat GitHub Pages: <https://pirstudiobali.github.io/Undangan-Pawiwahan-SR/>
+
+Jangan membuat repository baru dan jangan memindahkan `index.html` ke subfolder. Unggah isi ZIP ini ke root repository yang sama.
 
 ## Tautan personal
-Tambahkan `?to=` di belakang alamat website. Contoh:
-- `https://NAMA-AKUN.github.io/undangan-sarmita-reni/?to=Bapak%20Andi`
-- `https://NAMA-AKUN.github.io/undangan-sarmita-reni/?to=Ibu%20Siti`
+Tambahkan parameter `to` pada alamat website, misalnya:
 
-Gunakan Excel template secara lokal untuk menghasilkan tautan. Jangan unggah Excel yang berisi daftar nama tamu ke repository publik.
+- <https://pirstudiobali.github.io/Undangan-Pawiwahan-SR/?to=Bapak%20Andi>
+- <https://pirstudiobali.github.io/Undangan-Pawiwahan-SR/?to=Ibu%20Siti>
 
-## Catatan publikasi dan privasi
-- Website GitHub Pages dan PDF di repository ini dapat diakses publik.
-- Parameter `?to=` hanya mengganti nama tampilan. Penerima dapat mengubahnya; ini bukan login, verifikasi, atau tautan undangan rahasia.
-- PDF harus memang ditujukan untuk dibagikan secara publik sebelum diterbitkan.
-- PDF.js dan StPageFlip dimuat dari jsDelivr CDN, sehingga browser memerlukan koneksi internet.
+Gunakan file generator Excel secara lokal untuk membuat daftar tautan. **Jangan unggah Excel daftar tamu ke repository publik.**
+
+## Catatan audio
+Browser biasanya memblokir autoplay tanpa interaksi pengguna. Musik mulai setelah pengunjung menyentuh/mengeklik area pembaca atau kontrol navigasi. Pengunjung dapat menjeda dan melanjutkan musik melalui tombol musik di toolbar.
+
+## Catatan privasi dan publikasi
+- Repository dan seluruh berkas di GitHub Pages bersifat publik.
+- Pastikan PDF memang dimaksudkan untuk dibagikan kepada publik.
+- Parameter `?to=` hanya mempersonalisasi teks nama pada sampul. Parameter ini bukan autentikasi atau tautan rahasia; penerima dapat mengubah nama di URL.
+- PDF.js dan StPageFlip dimuat melalui CDN, sehingga pengunjung memerlukan koneksi internet.

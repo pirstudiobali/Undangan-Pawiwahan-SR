@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#f7f3ea">
   <meta name="description" content="Undangan pernikahan Sarmita dan Reni dalam bentuk buku digital interaktif.">
   <title>Undangan Sarmita &amp; Reni</title>
-  <link rel="stylesheet" href="./css/style.css?v=20261102-final-v2">
+  <link rel="stylesheet" href="./css/style.css?v=20261103-music-v4">
   <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
 </head>
 <body>
@@ -53,11 +53,15 @@
       <button id="fullscreen-button" class="icon-control fullscreen-control" type="button" aria-label="Layar penuh" title="Layar penuh">
         <span aria-hidden="true">⛶</span>
       </button>
+      <button id="music-button" class="icon-control music-control" type="button" aria-label="Putar musik" aria-pressed="false" title="Putar musik">
+        <span aria-hidden="true">♫</span>
+      </button>
     </nav>
   </main>
 
   <footer class="site-footer">made by pakde</footer>
 
-  <script type="module" src="./js/app.js?v=20261102-final-v2"></script>
+  <audio id="background-music" src="./assets/background-music.mp3?v=20261103-music-v4" preload="auto" loop playsinline></audio>
+  <script type="module" src="./js/app.js?v=20261103-music-v4"></script>
 </body>
 </html>
